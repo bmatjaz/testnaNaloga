@@ -1,0 +1,11 @@
+package com.example.demo;
+import java.sql.*;
+
+public class DbCon {
+
+    public Connection conn() throws SQLException {
+        Connection conn = DriverManager. getConnection("jdbc:h2:~/test", "sa", "");
+        // add application code here
+        return conn;
+    }
+}

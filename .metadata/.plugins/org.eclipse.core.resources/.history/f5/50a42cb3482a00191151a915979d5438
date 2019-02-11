@@ -1,0 +1,30 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+
+import com.example.demo.dao.PrescriptionRepo;
+import com.example.demo.model.Prescription;
+
+@Controller
+public class PrescriptionController {
+
+	
+	@Autowired
+	PrescriptionRepo repo;
+	
+	@RequestMapping("/")
+	public String home() {
+		return "home.jsp";
+	}
+	
+	@RequestMapping("addPrescription")
+	public String addPrescription(Prescription p) {
+		p.setId(999);
+		p.setMedName("adsadasdas");
+		repo.save(p);
+		return "sem tukaj";
+	}
+	
+}

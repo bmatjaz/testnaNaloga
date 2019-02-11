@@ -1,0 +1,9 @@
+INDEX VERSION 1.131
+/Users/matjazbesednjak/Projects/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/896008444.index
+/nalogaTestna/src/main/java
+/Users/matjazbesednjak/Projects/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1090471962.index
+/naloga/src/main/java
+/Users/matjazbesednjak/Projects/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/3361790681.index
+/Naloga/src/main/java
+/Users/matjazbesednjak/Projects/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/4208679006.index
+/Naloga/src/main/java

@@ -1,0 +1,265 @@
+package com.example.demo.rest;
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.DbCon;
+import com.example.demo.model.Prescription;
+import com.example.demo.service.PrescriptionService;
+
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.*;
+
+@RestController
+@EnableAutoConfiguration
+public class PrescriptionRest {
+
+	
+	@Autowired
+	private PrescriptionService prescriptionService;
+
+	
+	
+	@RequestMapping(value="/getOne", method = RequestMethod.GET)
+	public Prescription getOne(int id) {
+		try {
+			return prescriptionService.getPrescriptionById(id);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+
+	@RequestMapping(value="/vsi", method = RequestMethod.GET)
+	public List<Prescription> getAll() {
+		try {
+			return prescriptionService.getAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+	
+
+	@RequestMapping(value="/kreiraj", method = RequestMethod.POST)
+	public String kreiraj(Prescription p) {
+		try {
+			prescriptionService.create(p);
+			return "uspesno";
+		} catch (Exception e) {
+			// TODO: handle exception
+			return e.getMessage();
+		}
+	}
+	
+	@RequestMapping(value="/brisi", method = RequestMethod.DELETE)
+	public String brisi(int id) {
+		try {
+			prescriptionService.delete(id);
+			return "uspesno";
+		} catch (Exception e) {
+			// TODO: handle exception
+			return e.getMessage();
+		}
+	}
+	
+	@RequestMapping(value="/uredi", method = RequestMethod.PUT)
+	public String uredi(Prescription p) {
+		try {
+			prescriptionService.update(p);
+			return "uspesno";
+		} catch (Exception e) {
+			// TODO: handle exception
+			return e.getMessage();
+		}
+	}
+	
+	@RequestMapping(value="/getBetween", produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getBetween (Timestamp startTime, Timestamp endTime){
+		try {
+			List<Prescription> seznam = prescriptionService.getBetween(startTime, endTime);
+			
+			if(true)
+				return "lalalala";
+			
+			List<Prescription> seznam_vseh = new ArrayList<Prescription>();
+			for (Prescription p : seznam)
+			{
+				//start time + hours perios < end time in > start_time
+				Timestamp timeForAddmision = null;
+				timeForAddmision.setTime(p.getStart_time().getTime());
+				
+				while (timeForAddmision.getTime() >= p.getStart_time().getTime() && timeForAddmision.getTime() <= p.getEnd_time().getTime())
+				{
+					p.getStart_time().setTime(timeForAddmision.getTime());
+					timeForAddmision.setTime(timeForAddmision.getTime() + (((p.getTiming_hours_period() * 60 * 60 )) * 1000));
+					seznam_vseh.add(p);
+				}
+			}
+			
+			return "tuki";
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "fuck";
+		}
+	}
+	
+	//todo izpisi vse in pa izpis po uri
+	
+	
+	
+	@RequestMapping("/getAll2")
+	public List<Prescription> getAll2() throws Exception{
+
+		try {
+			DbCon db = new DbCon();
+			
+			ResultSet result = db.conn().executeQuery("SELECT * FROM PRESCRIPTION");
+			
+			List<Prescription> prescriptions = new ArrayList();
+			
+			
+			while(result.next())
+			{
+				Prescription p = new Prescription();
+				p.setId(result.getInt("id"));
+				p.setMedName(result.getString("med_name"));
+				p.setUnit(result.getString("unit"));
+				p.setDosage(result.getInt("dosage"));
+				p.setStart_time(result.getTimestamp("start_time"));
+				p.setEnd_time(result.getTimestamp("end_time"));
+				p.setTiming_hours_period(result.getInt("timing_hours_period"));
+				prescriptions.add(p);
+			}
+			
+			
+			return prescriptions;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@RequestMapping(value="/create", method = RequestMethod.POST)
+	public ResponseEntity<Prescription> vnos(Prescription p) {
+		
+		if(p != null)
+			{		
+				try {
+					DbCon db = new DbCon();				
+					db.conn().executeUpdate("INSERT INTO PRESCRIPTION(id, med_name, dosage, unit, timing_hours_period, start_time, end_time) VALUES (" + 
+					p.getId() +", '" + 
+					p.getMedName()+ "' ," +
+					p.getDosage() + " , '" +
+					p.getUnit() + "' , " +
+					p.getTiming_hours_period() + " , '" +
+					p.getStart_time() + "' , '" +
+					p.getEnd_time() + "')" );
+					return new ResponseEntity<Prescription>(p, HttpStatus.OK);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		return null;
+	}
+		
+	
+	@RequestMapping(value="/update", method = RequestMethod.PUT)
+	public String update(Prescription p) {
+		DbCon db = new DbCon();
+			try {
+				db.conn().executeUpdate("UPDATE PRESCRIPTION SET MED_NAME='"+p.getMedName() +"' WHERE ID="+ p.getId());
+				return "updated";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			}
+		return "Prazen obj " + p.getMedName() + p.getId();
+	}
+	
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	public String delete(int id) {
+		DbCon db = new DbCon();
+		try {
+			db.conn().executeUpdate("DELETE FROM PRESCRIPTION WHERE ID=" + id);
+			return "deleted";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		return "not deleted";
+	}
+	
+	
+	@RequestMapping("/getInTime")
+	public List<Prescription> getAll(Timestamp starttime, Timestamp endtime) throws Exception{
+
+		try {
+			DbCon db = new DbCon();
+			
+			ResultSet result = db.conn().executeQuery("SELECT * FROM PRESCRIPTION WHERE END_TIME > '" +
+					starttime + "' AND END_TIME >= '" + endtime +"'");
+			
+			List<Prescription> prescriptions = new ArrayList();
+			
+			
+			while(result.next())
+			{
+				Prescription p = new Prescription();
+				//za vsak output preglej na koliko ur se dozira in nato start time pristevaj te ure dokler cas ni vecji
+				//od end time
+				// nastavtive za pristevanje 1 uretimestamp.setTime(timestamp.getTime() + (((p.getHour * 60))* 1000));
+				p.setStart_time(result.getTimestamp("start_time"));
+				p.setEnd_time(result.getTimestamp("end_time"));
+				p.setTiming_hours_period(result.getInt("timing_hours_period"));
+				
+				Timestamp timeForAddmision = p.getStart_time();
+				
+				while (timeForAddmision.getTime() >= starttime.getTime() && timeForAddmision.getTime() <= endtime.getTime()) {
+					
+					p.setStart_time(result.getTimestamp("start_time"));
+					p.setEnd_time(result.getTimestamp("end_time"));
+					p.setTiming_hours_period(result.getInt("timing_hours_period"));
+					p.setId(result.getInt("id"));
+					p.setMedName(result.getString("med_name"));
+					p.setUnit(result.getString("unit"));
+					p.setDosage(result.getInt("dosage"));
+					
+					//izracunamo nov cas zadoziranje
+					timeForAddmision.setTime(timeForAddmision.getTime() + (((p.getTiming_hours_period() * 60 * 60 )) * 1000));
+					
+					prescriptions.add(p);
+				}
+			}
+			
+			
+			return prescriptions;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// za poizvedbo samo trenutnemu casu pristejemo na koliko ur se vzame zdravo. to ponavljamo dokler sestet cas ni vecji od endtime
+	//pogoj je izpolnjen v primeru da je sestet cas vecji od zacetnega in manjsi od koncnega
+	//koda od getAll preveri v while zanki
+	
+	
+}

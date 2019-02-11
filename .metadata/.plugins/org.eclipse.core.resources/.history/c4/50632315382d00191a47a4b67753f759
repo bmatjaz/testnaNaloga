@@ -1,0 +1,7 @@
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(1,'aspirin', 100, 'mg', '2019-02-08 01:39:36', '2019-02-08 18:39:36', 1)
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(2,'lekadol', 100, 'mg', '2019-02-08 02:39:36', '2019-02-08 19:39:36', 3)
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(3,'medex', 100, 'mg', '2019-02-08 03:39:36', '2019-02-08 17:39:36', 4)
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(4,'nikotin', 100, 'mg', '2019-02-08 04:39:36', '2019-02-08 16:39:36',2)
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(5,'natrij', 100, 'mg', '2019-02-08 05:39:36', '2019-02-08 15:39:36', 1)
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(6,'jod', 100, 'mg', '2019-02-08 06:39:36', '2019-02-08 14:39:36', 1)
+insert into prescription(id, med_name, dosage, unit, start_time, end_time, timing_hours_period) values(7,'sladkor', 100, 'mg', '2019-02-08 07:39:36', '2019-02-08 13:39:36', 5)

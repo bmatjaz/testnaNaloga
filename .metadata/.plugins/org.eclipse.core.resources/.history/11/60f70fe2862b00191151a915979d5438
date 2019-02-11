@@ -1,0 +1,30 @@
+package com.example.demo.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Prescription {
+	
+	@Id
+	private int id;
+	
+	private String medName;
+
+	public String getMedName() {
+		return medName;
+	}
+
+	public void setMedName(String medName) {
+		this.medName = medName;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+}

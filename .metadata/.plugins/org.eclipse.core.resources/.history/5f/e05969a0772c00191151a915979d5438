@@ -1,0 +1,20 @@
+package com.example.demo.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.dao.PrescriptionDAO;
+import com.example.demo.model.Prescription;
+
+@Transactional
+public class PrescriptionService {
+	
+	@Autowired
+	private PrescriptionDAO prescriptionDAO;
+	
+	public void create(Prescription p) {
+		prescriptionDAO.create(p);
+	}
+	
+
+}

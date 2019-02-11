@@ -1,0 +1,48 @@
+package com.example.demo.dao;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
+import com.example.demo.model.Prescription;
+
+@Repository
+public class PrescriptionDAO {
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	public void create (Prescription p) {
+		entityManager.persist(p);
+	}
+	
+	public void update(Prescription p) {
+		entityManager.merge(p);
+	}
+	
+	public Prescription getPrescriptionById(int id) {
+		return entityManager.find(Prescription.class, id);
+	}
+	
+	public void delete(int id) {
+		Prescription p = getPrescriptionById(id);
+		if(p != null)
+			entityManager.remove(p);
+	}
+	
+	public List<Prescription> getAll() {
+		return entityManager.createNativeQuery("SELECT * FROM PRESCRIPTION").getResultList();
+	}
+	
+	public List<Prescription> getBetween(Timestamp startTime, Timestamp endTime){
+		List<Prescription> p = entityManager.createCustomQuery("SELECT * FROM PRESCRIPTION WHERE end_time>='"+ startTime + "' AND start_time <= '" + endTime + "'").getResultList();
+		return p;
+	}
+	
+	
+
+}

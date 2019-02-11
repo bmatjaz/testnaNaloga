@@ -1,0 +1,26 @@
+package com.example.demo.dao;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
+import com.example.demo.model.Prescription;
+
+@Repository
+public class PrescriptionDAO {
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	public void create (Prescription p) {
+		entityManager.persist(p);
+	}
+	
+	public void update(Prescription p) {
+		entityManager.merge(p);
+	}
+	
+	
+
+}
