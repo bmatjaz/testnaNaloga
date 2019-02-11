@@ -31,6 +31,7 @@ http://localhost:8080/create?medName=Aspirin&dosage=100&unit=mg&start_time=2019-
 http://localhost:8080/create?medName=Aspirin&dosage=100&unit=mg&start_time=2019-02-08 02:04:27.883&end_time=2019-02-09 12:23:27.883&timing_hours_period=1
 
 
+
 Dodatne možnosti za nadgradnjo programa so
 - povezovanje z osebo (da vemo komu moramo zdravilo dati)
 - dodajanje dodatnega polja komentar/razlog zakaj je pacientu dodeljeno to zdravilo (da bolnik s pljučnico ne dobiva zdravila za redčenje krvi v primeru napake pri vnosu podatkov)
